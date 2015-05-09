@@ -1,0 +1,1 @@
+@php phpdop.phpr %1

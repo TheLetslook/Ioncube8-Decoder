@@ -1,0 +1,1 @@
+@php phpdc.phpr %1

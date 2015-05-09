@@ -1,0 +1,131 @@
+#! /usr/bin/php
+<?php
+
+$srcdir = dirname(__FILE__);
+require_once("$srcdir/Decompiler.class.php");
+if (file_exists("$srcdir/phpdc.debug.php")) {
+	include("$srcdir/phpdc.debug.php");
+}
+
+function get_op($op)
+{
+	switch ($op['op_type']) {
+	case 1: // CONST
+		return var_export($op['constant'], true);
+
+	case 2: // IS_TMP_VAR
+		return 't@' . $op['var'];
+
+	case 4:
+		return 'v$' . $op['var'];
+
+	case 8: // UNUSED
+		if (isset($op['opline_num'])) {
+			return 'l#' . $op['opline_num'];
+		}
+		else {
+			return '-';
+		}
+	case 16: // COMPILED VAR
+		return 'cv%' . $op['var'];
+
+	default:
+		return $op['op_type'] . $op['var'];
+	}
+}
+
+function dump_opcodes($opcodes, $indent = '')
+{
+	global $decompiler;
+
+	$types = array('result' => 5, 'op1' => 20, 'op2' => 20);
+	foreach ($decompiler->fixOpcode($opcodes) as $line => $op) {
+		echo $indent;
+		echo sprintf("%3d ", $op['lineno']);
+		echo sprintf("%3d ", $line);
+		$name = xcache_get_opcode($op['opcode']);
+
+		if (substr($name, 0, 5) == 'ZEND_') {
+			$name = substr($name, 5);
+		}
+		echo str_pad($name, 25);
+		foreach ($types as $t => $len) {
+			echo str_pad(isset($op[$t]) ? get_op($op[$t]) : "", $len);
+		}
+
+		printf("%5s", isset($op['extended_value']) ?  $op['extended_value'] : "");
+		echo "\n";
+	}
+}
+
+function dump_function($name, $func, $indent = '')
+{
+	if (isset($func['op_array'])) {
+		$op_array = $func['op_array'];
+		unset($func['op_array']);
+	}
+	else {
+		$op_array = null;
+	}
+	var_dump($func);
+	echo $indent, 'function ', $name, "\n";
+	if (isset($op_array)) {
+		dump_opcodes($op_array['opcodes'], "  " . $indent);
+	}
+}
+
+function dump_class($name, $class, $indent = '')
+{
+	if (isset($class['function_table'])) {
+		$funcs = $class['function_table'];
+		unset($class['function_table']);
+	}
+	else {
+		$funcs = null;
+	}
+	echo $indent, 'class ', $name, "\n";
+	if (isset($funcs)) {
+		foreach ($funcs as $name => $func) {
+			dump_function($name, $func, "  " . $indent);
+		}
+	}
+}
+
+if (!isset($argv[1])) {
+	die("Usage: $argv[0] <file>\n");
+}
+$decompiler = new Decompiler();
+if (isset($argv[2])) {
+	eval('$pk = ' . file_get_contents($argv[2]) . ';');
+}
+else {
+	$pk = xcache_dasm_file($argv[1]);
+}
+$op_array = $funcs = $classes = null;
+if (isset($pk['op_array'])) {
+	$op_array = $pk['op_array'];
+	unset($pk['op_array']);
+}
+if (isset($pk['function_table'])) {
+	$funcs = $pk['function_table'];
+	unset($pk['function_table']);
+}
+if (isset($pk['class_table'])) {
+	$classes = $pk['class_table'];
+	unset($pk['class_table']);
+}
+var_dump($pk);
+if (isset($classes)) {
+	foreach ($classes as $name => $class) {
+		dump_class($name, $class);
+	}
+}
+if (isset($funcs)) {
+	foreach ($funcs as $name => $func) {
+		dump_function($name, $func);
+	}
+}
+if (isset($op_array)) {
+	dump_opcodes($op_array['opcodes']);
+}
+

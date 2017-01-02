@@ -30,7 +30,7 @@ echo                               All UpToDate Decoder
 echo                #######################################################
 echo.Alert ++ Should Put Decoder on C:\ Drive Like This c:\ioncube_priv8_decoder_v1 
 echo.
-echo [1] - Decode IC8.x and Zend Optimizer UpToDate (PHP 5.4):
+echo [1] - Decode IC8.x and Zend Optimizer UpToDate (PHP 5.3):
 echo [2] - Decode IC8.x and Zend Optimizer UpToDate (PHP 5.2):
 echo [3] - Decode IC7.x and Zend Optimizer UpToDate (PHP 5.3):
 echo [4] - Decode IC7.x and Zend Optimizer and PHPExpress UpToDate (PHP 5.2):
@@ -57,14 +57,14 @@ pause
 cd c:\ioncube_priv8_decoder_v1\php\IC8_5.3
 move c:\ioncube_priv8_decoder_v1\\ENCODED\*.php c:\ioncube_priv8_decoder_v1\\php\IC8_5.3\enc\ >NUL
 FOR %%i IN (enc\*.php) DO (
-php-cgi.exe -c php54.ini %%i > dec\%%~nxi
+php-cgi.exe -c php53.ini %%i > dec\%%~nxi
 )
 move dec\*.php ..\..\DECODED >NUL
 cd c:\ioncube_priv8_decoder_v1\
 FOR %%A IN (php\IC8_5.3\enc\*.*) DO ECHO Y | DEL %%A
 
-echo                                 "Файл(ы) Декомпилированы"
-echo                        Нажмите любую кнопку для возвращения в меню.
+echo                                "File(s) Decompiled"
+echo                        Press any key to return to the menu
 pause >NUL
 goto mainMenu
 
@@ -76,8 +76,8 @@ php.exe -c php.ini %%i
 move ..\..\ENCODED\*.php ..\..\DECODED\ >NUL
 )
 
-echo                                 "Файл(ы) Декомпилированы"
-echo                        Нажмите любую кнопку для возвращения в меню.
+echo                                "File(s) Decompiled"
+echo                        Press any key to return to the menu
 pause >NUL
 goto mainMenu
 
@@ -91,8 +91,8 @@ move dec\*.php ..\..\DECODED >NUL
 cd c:\ioncube_priv8_decoder_v1\
 FOR %%A IN (php\IC7_5.3\enc\*.*) DO ECHO Y | DEL %%A
 
-echo                                 "Файл(ы) Декомпилированы"
-echo                        Нажмите любую кнопку для возвращения в меню.
+echo                                "File(s) Decompiled"
+echo                        Press any key to return to the menu
 pause >NUL
 goto mainMenu
 
@@ -110,8 +110,8 @@ if not "!filename!"=="%%~nj" ren "%%j" "!filename!%%~xj"
 )
 FOR %%A IN (..\..\ENCODED\*.*) DO ECHO Y | DEL %%A
 
-echo                                 "Файл(ы) Декомпилированы"
-echo                        Нажмите любую кнопку для возвращения в меню.
+echo                                "File(s) Decompiled"
+echo                        Press any key to return to the menu
 pause >NUL
 goto mainMenu
 
@@ -133,8 +133,8 @@ FOR %%i IN (c:\ioncube_priv8_decoder_v1\DECODED\*.php) DO (
 c:\ioncube_priv8_decoder_v1\php\lib_fixer.exe %%i "Test"
 )
 
-echo                                 "Файл(ы) Декомпилированы"
-echo                        Нажмите любую кнопку для возвращения в меню.
+echo                                "File(s) Decompiled"
+echo                        Press any key to return to the menu
 pause >NUL
 goto mainMenu
 
@@ -142,8 +142,8 @@ goto mainMenu
 cd c:\ioncube_priv8_decoder_v1\php\xcache
 php.exe folder_decompile.php c:\ioncube_priv8_decoder_v1\ENCODED c:\ioncube_priv8_decoder_v1\DECODED
 FOR %%A IN (c:\ioncube_priv8_decoder_v1\ENCODED\*.*) DO ECHO Y | DEL %%A
-echo                                 "Файл(ы) Декомпилированы"
-echo                        Нажмите любую кнопку для возвращения в меню.
+echo                                "File(s) Decompiled"
+echo                        Press any key to return to the menu
 pause >NUL
 goto mainMenu
 
@@ -158,8 +158,8 @@ set filename=!filename:_de=!
 if not "!filename!"=="%%~nj" ren "%%j" "!filename!%%~xj"
 )
 FOR %%A IN (c:\ioncube_priv8_decoder_v1\ENCODED\*.*) DO ECHO Y | DEL %%A
-echo                                 "Файл(ы) Декомпилированы"
-echo                        Нажмите любую кнопку для возвращения в меню.
+echo                                "File(s) Decompiled"
+echo                        Press any key to return to the menu
 pause >NUL
 goto mainMenu
 
@@ -172,8 +172,8 @@ php.exe -c php.ini Formatting_Dec_IonCube_V4.php %%i dec\%%~nxi
 move dec\*.php ..\..\DECODED >NUL
 cd c:\ioncube_priv8_decoder_v1\
 FOR %%A IN (php\Fixer\enc\*.*) DO ECHO Y | DEL %%A
-echo                                 "Файл(ы) Декомпилированы"
-echo                        Нажмите любую кнопку для возвращения в меню.
+echo                                "File(s) Decompiled"
+echo                        Press any key to return to the menu
 pause >NUL
 goto mainMenu
 
